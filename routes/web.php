@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('backend.dashboard.index');
-})->middleware(['auth'])->name('dashboard');
+/* CMS routes */
+Route::group(['middleware' => 'auth'], function()  
+{
 
+    Route::group(['prefix' => config('app.backend_prefix')], function()  
+    {
+        
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    });
+
+});
 require __DIR__.'/auth.php';
